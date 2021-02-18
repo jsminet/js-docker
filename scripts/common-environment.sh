@@ -67,7 +67,7 @@ initialize_deploy_properties() {
   if [ ! -d ${KEYSTORE_PATH} ] ; then
     mkdir ${KEYSTORE_PATH}
   fi
-  ##chmod -R 777 ${KEYSTORE_PATH}
+  chmod -R 777 ${KEYSTORE_PATH}
   if [ ! -f "$KEYSTORE_PATH/.jrsks" -o ! -f "$KEYSTORE_PATH/.jrsksp" ]; then
       ls -a ${KEYSTORE_PATH}
 	  echo ".jrsks missing in $KEYSTORE_PATH. They will be created"
