@@ -41,6 +41,8 @@ ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jaspe
 
 # This Dockerfile requires an exploded JasperReports Server WAR file installer file
 # EXPLODED_INSTALLER_DIRECTORY (default jasperreports-server-bin/) directory below the Dockerfile.
+RUN groupadd --gid 5000 jasperserver && useradd jasperserver
+USER testuser
 
 # deploy the WAR to Tomcat
 COPY ${EXPLODED_INSTALLER_DIRECTORY}/jasperserver-pro $CATALINA_HOME/webapps/jasperserver-pro/
