@@ -26,8 +26,6 @@ ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jaspe
 # COPY the buildomatic, command line scripts and supporting resources
 # from the JasperReports Server WAR file installer into the image
 
-RUN  useradd -u 8998 jasperserver
-USER jasperserver
 
 # Ant
 COPY ${EXPLODED_INSTALLER_DIRECTORY}/apache-ant /usr/src/jasperreports-server/apache-ant/
@@ -62,6 +60,10 @@ RUN echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null && \
     java -version && \
     wget "https://jdbc.postgresql.org/download/postgresql-${POSTGRES_JDBC_DRIVER_VERSION}.jar"  \
         -P /usr/src/jasperreports-server/buildomatic/conf_source/db/postgresql/jdbc --no-verbose
+
+
+RUN  useradd -u 8998 jasperserver
+USER jasperserver
 
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint-cmdline.sh"]
 

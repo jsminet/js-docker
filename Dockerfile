@@ -41,8 +41,6 @@ ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jaspe
 
 # This Dockerfile requires an exploded JasperReports Server WAR file installer file
 # EXPLODED_INSTALLER_DIRECTORY (default jasperreports-server-bin/) directory below the Dockerfile.
-RUN  useradd -u 8998 jasperserver
-USER jasperserver
 
 # deploy the WAR to Tomcat
 COPY ${EXPLODED_INSTALLER_DIRECTORY}/jasperserver-pro $CATALINA_HOME/webapps/jasperserver-pro/
@@ -88,6 +86,8 @@ RUN chmod +x /usr/src/jasperreports-server/scripts/*.sh && \
 # or use dynamic ports.
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
 
+RUN  useradd -u 8998 jasperserver
+USER jasperserver
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint.sh"]
 
 # Default action executed by entrypoint script.
