@@ -67,6 +67,7 @@ initialize_deploy_properties() {
   # echo $JRSKS_PATH_FILES
   if [ ! -d ${KEYSTORE_PATH} ] ; then
     mkdir ${KEYSTORE_PATH}
+    chmod -R 777 ${KEYSTORE_PATH}
   fi
 
   if [ ! -f "$KEYSTORE_PATH/.jrsks" -o ! -f "$KEYSTORE_PATH/.jrsksp" ]; then
