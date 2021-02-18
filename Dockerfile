@@ -87,7 +87,11 @@ RUN chmod +x /usr/src/jasperreports-server/scripts/*.sh && \
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
 
 RUN  useradd -u 8998 jasperserver
+RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
+RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro
+RUN chown -R jasperserver:jasperserver $CATALINA_HOME
 USER jasperserver
+
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint.sh"]
 
 # Default action executed by entrypoint script.
