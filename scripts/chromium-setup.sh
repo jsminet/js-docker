@@ -17,17 +17,17 @@ fi
 echo "Installing packages with $PACKAGE_MGR"
 case "$PACKAGE_MGR" in
 "yum")
-  yum -y install chromium
+  sudo yum -y install chromium
   ;;
 "zypper")
-  zypper -n install chromium
+  sudo zypper -n install chromium
   ;;
 "rpm")
   echo "Installed nothing via rpm"
   exit 1
   ;;
 "apt_get")
-  apt-get install -y --no-install-recommends chromium
+  sudo apt-get install -y --no-install-recommends chromium
   ;;
 esac
 
