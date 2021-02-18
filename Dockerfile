@@ -86,7 +86,7 @@ RUN chmod +x /usr/src/jasperreports-server/scripts/*.sh && \
 # or use dynamic ports.
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
 
-RUN  useradd -u 8998 jasperserver
+RUN addgroup -S jasperserver && adduser -D -S -H -G jasperserver jasperserver
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
 RUN chown -R jasperserver:jasperserver $CATALINA_HOME

@@ -62,7 +62,7 @@ RUN echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null && \
         -P /usr/src/jasperreports-server/buildomatic/conf_source/db/postgresql/jdbc --no-verbose
 
 
-RUN  useradd -u 8998 jasperserver
+RUN addgroup -S jasperserver && adduser -D -S -H -G jasperserver jasperserver
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
 USER jasperserver
