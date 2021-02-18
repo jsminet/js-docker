@@ -65,7 +65,6 @@ RUN echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null && \
 RUN  useradd -u 8998 jasperserver
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
-RUN chown -R jasperserver:jasperserver $CATALINA_HOME
 USER jasperserver
 
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint-cmdline.sh"]
