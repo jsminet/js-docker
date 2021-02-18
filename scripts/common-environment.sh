@@ -53,7 +53,7 @@ export ANT_OPTS="$ANT_OPTS @$DIR/java11.opts"
 initialize_deploy_properties() {
   # license could fail
   config_license
-  
+  $DIR/chromium-setup.sh
   # If environment is not set, uses default values for postgres
   DB_TYPE=${DB_TYPE:-postgresql}
   DB_USER=${DB_USER:-postgres}
