@@ -26,8 +26,8 @@ ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jaspe
 # COPY the buildomatic, command line scripts and supporting resources
 # from the JasperReports Server WAR file installer into the image
 
-RUN groupadd --gid 5000 jasperserver && useradd jasperserver
-USER testuser
+RUN  useradd -u 8998 jasperserver
+USER jasperserver
 
 # Ant
 COPY ${EXPLODED_INSTALLER_DIRECTORY}/apache-ant /usr/src/jasperreports-server/apache-ant/
