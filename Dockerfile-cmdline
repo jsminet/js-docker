@@ -61,10 +61,11 @@ RUN echo "nameserver 8.8.8.8" | tee /etc/resolv.conf > /dev/null && \
     wget "https://jdbc.postgresql.org/download/postgresql-${POSTGRES_JDBC_DRIVER_VERSION}.jar"  \
         -P /usr/src/jasperreports-server/buildomatic/conf_source/db/postgresql/jdbc --no-verbose
 
-##RUN mkdir -p usr/local/share/jasperserver-pro/keystore
-RUN  adduser  jasperserver
+RUN mkdir -p usr/local/share/jasperserver-pro/keystore
+RUN  adduser  jasperserver --uid 10001
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
+RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro/keystore
 USER jasperserver
 
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint-cmdline.sh"]
