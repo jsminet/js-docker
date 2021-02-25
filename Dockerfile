@@ -86,13 +86,14 @@ RUN chmod +x /usr/src/jasperreports-server/scripts/*.sh && \
 # or use dynamic ports.
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
 
-#RUN mkdir -p usr/local/share/jasperserver-pro/keystore
+
 RUN  adduser  jasperserver --uid 10001
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
 RUN chown -R jasperserver:jasperserver $CATALINA_HOME
-#RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro/keystore
+RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro/keystore
 USER jasperserver
+VOLUME usr/local/share/jasperserver-pro/keystore
 
 ENTRYPOINT ["/usr/src/jasperreports-server/scripts/entrypoint.sh"]
 
