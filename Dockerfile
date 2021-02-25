@@ -91,7 +91,7 @@ RUN  adduser  jasperserver --uid 10001
 RUN chown -R jasperserver:jasperserver /usr/src/jasperreports-server
 RUN chown -R jasperserver:jasperserver /usr/local/share
 RUN chown -R jasperserver:jasperserver $CATALINA_HOME
-RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro/keystore
+#RUN chown -R jasperserver:jasperserver /usr/local/share/jasperserver-pro/keystore
 USER jasperserver
 VOLUME usr/local/share/jasperserver-pro/keystore
 
