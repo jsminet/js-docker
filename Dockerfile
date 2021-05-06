@@ -37,13 +37,13 @@ ENV JAVASCRIPT_RENDERING_ENGINE  ${JAVASCRIPT_RENDERING_ENGINE:-chromium}
 
 ENV POSTGRES_JDBC_DRIVER_VERSION ${POSTGRES_JDBC_DRIVER_VERSION:-42.2.5}
 ENV JASPERREPORTS_SERVER_VERSION ${JASPERREPORTS_SERVER_VERSION:-7.8.0}
-ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jasperreports-server-pro-$JASPERREPORTS_SERVER_VERSION-bin}
+ENV EXPLODED_INSTALLER_DIRECTORY ${EXPLODED_INSTALLER_DIRECTORY:-resources/jasperreports-server-cp-$JASPERREPORTS_SERVER_VERSION-bin}
 
 # This Dockerfile requires an exploded JasperReports Server WAR file installer file
 # EXPLODED_INSTALLER_DIRECTORY (default jasperreports-server-bin/) directory below the Dockerfile.
 
 # deploy the WAR to Tomcat
-COPY ${EXPLODED_INSTALLER_DIRECTORY}/jasperserver-pro $CATALINA_HOME/webapps/jasperserver-pro/
+COPY ${EXPLODED_INSTALLER_DIRECTORY}/jasperserver $CATALINA_HOME/webapps/jasperserver/
 
 #copy copyright notices
 COPY ${EXPLODED_INSTALLER_DIRECTORY}/TIB* /usr/src/jasperreports-server/
@@ -66,7 +66,7 @@ COPY ${EXPLODED_INSTALLER_DIRECTORY}/buildomatic/lib /usr/src/jasperreports-serv
 COPY scripts /usr/src/jasperreports-server/scripts/
 
 RUN chmod +x /usr/src/jasperreports-server/scripts/*.sh && \
-    /usr/src/jasperreports-server/scripts/installPackagesForJasperserver-pro.sh && \
+    /usr/src/jasperreports-server/scripts/installPackagesForJasperserver-cp.sh && \
     rm -rf $CATALINA_HOME/webapps/ROOT && \
     rm -rf $CATALINA_HOME/webapps/docs && \
     rm -rf $CATALINA_HOME/webapps/examples && \

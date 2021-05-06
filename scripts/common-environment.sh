@@ -6,7 +6,7 @@
 
 # This script sets up and runs JasperReports Server on container start.
 # Default "run" command, set in Dockerfile, executes run_jasperserver.
-# If webapps/jasperserver-pro does not exist, run_jasperserver 
+# If webapps/jasperserver does not exist, run_jasperserver 
 # redeploys webapp. If "jasperserver" database does not exist,
 # run_jasperserver redeploys minimal database.
 # Additional "init" only calls init_database, which will try to recreate 
@@ -18,7 +18,7 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 BUILDOMATIC_HOME=${BUILDOMATIC_HOME:-/usr/src/jasperreports-server/buildomatic}
-MOUNTS_HOME=${MOUNTS_HOME:-/usr/local/share/jasperserver-pro}
+MOUNTS_HOME=${MOUNTS_HOME:-/usr/local/share/jasperserver-cp}
 
 KEYSTORE_PATH=${KEYSTORE_PATH:-${MOUNTS_HOME}/keystore}
 export ks=$KEYSTORE_PATH
@@ -51,9 +51,7 @@ export JAVA_OPTS="$JAVA_OPTS -XX:-UseContainerSupport -XX:MinRAMPercentage=$JAVA
 export ANT_OPTS="$ANT_OPTS @$DIR/java11.opts"
 
 initialize_deploy_properties() {
-  # license could fail
-  config_license
-  
+ 
   # If environment is not set, uses default values for postgres
   DB_TYPE=${DB_TYPE:-postgresql}
   DB_USER=${DB_USER:-postgres}
@@ -87,7 +85,7 @@ dbPassword=$DB_PASSWORD
 js.dbName=$DB_NAME
 foodmart.dbName=foodmart
 sugarcrm.dbName=sugarcrm
-webAppName=jasperserver-pro
+webAppName=jasperserver
 ks=$KEYSTORE_PATH
 ksp=$KEYSTORE_PATH
 _EOL_
@@ -232,22 +230,6 @@ test_database_connection() {
 	done
 }
 
-
-config_license() {
-  # load license file from volume
-  JRS_LICENSE_FINAL=${JRS_LICENSE:-${MOUNTS_HOME}/license}
-  if [ ! -f "$JRS_LICENSE_FINAL/jasperserver.license" ]; then
-	echo "No license file in $JRS_LICENSE_FINAL. Exiting.,..."
-    exit 1
-  else
-    echo "Used license at $JRS_LICENSE_FINAL"
-	cp $JRS_LICENSE_FINAL/jasperserver.license ~
-	# get rid of old license files if they exist. ie. container restart
-	rm -f ~/.jr-*
-	rm -f ~/.*lic
-  fi
-}
-
 execute_buildomatic() {
 
   # execute buildomatic js-ant targets for installing/configuring
@@ -256,22 +238,22 @@ execute_buildomatic() {
   cd ${BUILDOMATIC_HOME}/
   
   for i in $@; do
-    # Default buildomatic deploy-webapp-pro target attempts to remove
-    # $CATALINA_HOME/webapps/jasperserver-pro path.
+    # Default buildomatic deploy-webapp-ce target attempts to remove
+    # $CATALINA_HOME/webapps/jasperserver path.
     # This behaviour does not work if mounted volumes are used.
     # Using unzip to populate webapp directory and non-destructive
     # targets for configuration
-    if [ $i == "deploy-webapp-pro" ]; then
+    if [ $i == "deploy-webapp-ce" ]; then
       ./js-ant \
-        set-pro-webapp-name \
+        set-ce-webapp-name \
         deploy-webapp-datasource-configs \
         deploy-jdbc-jar \
-        -DwarTargetDir=$CATALINA_HOME/webapps/jasperserver-pro
+        -DwarTargetDir=$CATALINA_HOME/webapps/jasperserver
     else
       # warTargetDir webaAppName are set as
       # workaround for database configuration regeneration
       ./js-ant $i \
-        -DwarTargetDir=$CATALINA_HOME/webapps/jasperserver-pro
+        -DwarTargetDir=$CATALINA_HOME/webapps/jasperserver
     fi
   done
 }
