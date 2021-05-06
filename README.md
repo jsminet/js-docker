@@ -1,4 +1,4 @@
-# TIBCO  JasperReports&reg; Server for Containers
+# TIBCO  JasperReports&reg; Server **Community Edition** for Containers
 
 # Table of contents
 
@@ -36,8 +36,10 @@
 
 # Introduction
 
-This distribution includes `Dockerfile`s and supporting files for building, configuring, and running TIBCO JasperReports&reg; Server commercial editions in containers. Orchestration via Kubernetes, AWS and Helm are outlined as options.  These samples can be used as is or modified to meet the needs of your environment. 
-The distribution can be downloaded from [https://github.com/TIBCOSoftware/js-docker](#https://github.com/TIBCOSoftware/js-docker).
+This repository has been forked from from [https://github.com/TIBCOSoftware/js-docker](#https://github.com/TIBCOSoftware/js-docker)
+
+This distribution includes `Dockerfile`s and supporting files for building, configuring, and running TIBCO JasperReports&reg; Server **Community Edition** in containers. Orchestration via Kubernetes, AWS and Helm are outlined as options.  These samples can be used as is or modified to meet the needs of your environment. 
+The distribution can be downloaded 
 
 This configuration has been certified using
 the PostgreSQL 9 database with JasperReports Server 6.4+
@@ -60,10 +62,6 @@ The following software is required or recommended:
   - [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/)
 - (*optional*) [docker-compose](https://docs.docker.com/compose/install) version 1.12 or higher
 - (*optional*) [git](https://git-scm.com/downloads)
-- (*required*) TIBCO Jaspersoft&reg; commercial license.
-- Contact your sales
-representative for information about licensing. If you do not specify a
-TIBCO Jaspersoft license, the evaluation license is used.
 - (*optional*) Preconfigured PostgreSQL, MySQL, Oracle, SQL Server or DB2 database. If you do not
 currently have a database instance, you can create a database container
 at deployment time.
@@ -75,17 +73,16 @@ at deployment time.
 Download the js-docker repository as a zip and unzip it, or clone the repository from Github.
 
 To download a zip of js-docker:
-- Go to [https://github.com/TIBCOSoftware/js-docker](https://github.com/TIBCOSoftware/js-docker)
-- Select Download ZIP on the right hand side of the screen.
-![Download ZIP or Clone](js-docker-clone-download.png)
+- Go to [https://community.jaspersoft.com/project/jasperreports-server/releases](https://community.jaspersoft.com/project/jasperreports-server/releases)
+- Select TIB_js-jrs-cp_X.X.X_bin.zip on the bottom of the screen.
 
 Select Open in Desktop if you have a Git Desktop installed. This will clone the repository for you.
  
 If you have the Git command line installed, you can clone the JasperReports Server Docker github repository at 
-[https://github.com/TIBCOSoftware/js-docker](https://github.com/TIBCOSoftware/js-docker)
+[https://github.com/jsminet/js-docker.git](https://github.com/jsminet/js-docker.git)
 
 ```console
-$ git clone https://github.com/TIBCOSoftware/js-docker
+$ git clone https://github.com/jsminet/js-docker.git
 $ cd js-docker
 ```
 
@@ -117,8 +114,8 @@ The js-docker github repository contains:
 ## Building your JasperReports Server images
 
 There are two images for JasperReports Server container deployments.
-- `jasperserver-pro`: JasperReports Server web application
-- `jasperserver-pro-cmdline`: Command line tools. Initialize the repository and keystore, export, import.
+- `jasperserver-cp`: JasperReports Server web application
+- `jasperserver-cp-cmdline`: Command line tools. Initialize the repository and keystore, export, import.
 
 ### Prepare the resources for the images
 
@@ -127,8 +124,8 @@ We need commercial editions of the JasperReports Server WAR file installer in or
 1. Either:
   - Download a commerical edition of JasperReports Server WAR File installer zip archive from the TIBCO eDelivery site, which is available to TIBCO/Jaspersoft customers.
   - Or build a WAR file installer from the installation of a commercial Jaspersoft bundled installer [Jaspersoft WAR File Installer builder](buildWARFileInstaller)
-1. Put the installer zip file to the `resources` directory in the repository structure.
-1. Run resources/unpackWARInstaller.sh or unpackWARInstaller.bat. This will create a directory like jasperreports-server-pro-X.X.X-bin. Also unzip jasperreports-server-pro-X.X.X-bin/jasperserver-pro.war into jasperreports-server-pro-X.X.X-bin/jasperserver-pro.
+2. Put the installer zip file to the `resources` directory in the repository structure.
+3. Run resources/unpackWARInstaller.sh or unpackWARInstaller.bat. This will create a directory like jasperreports-server-cp-X.X.X-bin. Also unzip jasperreports-server-cp-X.X.X-bin/jasperserver-cp.war into jasperreports-server-cp-X.X.X-bin/jasperserver-cp.
 
 You can do this manually as well.
 
@@ -137,9 +134,9 @@ If you have downloaded the WAR file installer zip to your ~/Downloads directory:
 ```console
 $ unzip -o -q ~/Downloads/TIB_js-jrs_X.X.X_bin.zip -d resources/
 
-$ cd resources/jasperreports-server-pro-X.X.X-bin
+$ cd resources/jasperreports-server-cp-X.X.X-bin
 
-$ unzip -o -q jasperserver-pro.war -d jasperserver-pro
+$ unzip -o -q jasperserver.war -d jasperserver
 ```
 
 ### docker build time environment variables
@@ -152,7 +149,7 @@ For the JasperReports Server Web app (WAR):
 | ------------ | ------------- |
 | `TOMCAT_BASE_IMAGE` | Tomcat Docker image certified for the version of JasperReports Server being deployed. Linux images using apt-get (Debian) or yum (CentOS, Redhat, Corretto/Amazon Linux 2) package managers. Default for 7.8.0: "tomcat:9.0.37-jdk11-openjdk" and for Amazon Linux "tomcat:9.0.37-jdk11-corretto". |
 | `JASPERREPORTS_SERVER_VERSION` | Version number used in file names. Default for JasperReports Server: 7.8.0 | 
-| `EXPLODED_INSTALLER_DIRECTORY` | Directory below the Dockerfiles where the WAR file installer has been prepared as above. Default: resources/jasperreports-server-pro-$JASPERREPORTS_SERVER_VERSION-bin
+| `EXPLODED_INSTALLER_DIRECTORY` | Directory below the Dockerfiles where the WAR file installer has been prepared as above. Default: resources/jasperreports-server-cp-$JASPERREPORTS_SERVER_VERSION-bin
 | `HTTP_PORT` | HTTP port Tomcat runs on and .env file should be updated wih right port number if any non default port is used. Default: "8080" |
 | `HTTPS_PORT` | HTTPS port Tomcat runs on and .env file should be updated wih right port number if any non default port is used. Default: "8443" |
 | `JRS_HTTPS_ONLY` | Enables HTTPS-only mode. Default: false. |
@@ -168,14 +165,14 @@ For the cmdline:
 | ------------ | ------------- |
 | `JAVA_BASE_IMAGE` | Java Docker image certified for the version of JasperReports Server being deployed.  Linux images using apt-get (Debian) or yum (CentOS, Redhat, Corretto/Amazon Linux 2) package managers. JDK 8 or 11 from https://github.com/docker-library/docs/blob/master/openjdk/README.md#supported-tags-and-respective-dockerfile-links Default openjdk:11-jdk and for Amazon Linux  amazoncorretto:11|
 | `JASPERREPORTS_SERVER_VERSION` | Version number used in file names. Default: 7.8.0 | 
-| `EXPLODED_INSTALLER_DIRECTORY` | Directory below the Dockerfiles where the WAR file installer has been prepared as above. Default: resources/jasperreports-server-pro-$JASPERREPORTS_SERVER_VERSION-bin
+| `EXPLODED_INSTALLER_DIRECTORY` | Directory below the Dockerfiles where the WAR file installer has been prepared as above. Default: resources/jasperreports-server-cp-$JASPERREPORTS_SERVER_VERSION-bin
 |`POSTGRES_JDBC_DRIVER_VERSION` | Default: 42.2.5. If you change this, the new version will be downloaded from https://jdbc.postgresql.org/download.html  |
 
 ### Build the images
 
-`docker build -t jasperserver-pro:7.8.0 .`
+`docker build -t jasperserver-cp:7.8.0 .`
 
-`docker build -t jasperserver-pro-cmdline:7.8.0 -f Dockerfile-cmdline .`
+`docker build -t jasperserver-cp-cmdline:7.8.0 -f Dockerfile-cmdline .`
 
 # docker run time environment variables
 
@@ -243,12 +240,11 @@ For the JasperReports Server Web app (WAR):
 
 | Description | Path to override in container | Notes |
 | ------------ | ------------- | ------------ |
-| License | `/usr/local/share/jasperserver-pro/license` | REQUIRED. Path to contain `jasperserver.license` file to use. |
-| Encryption keystore files | `/usr/local/share/jasperserver-pro/keystore` | REQUIRED.  .jrsks and .jrsksp files used to encrypt sensitive values. This volume is required for use with JRS 7.8.0, which will create these files on this volume if they do not exist when initializing the repository database. |
-| JasperReports Server customizations | `/usr/local/share/jasperserver-pro/customization` | Zip files. If a zip file contains `install.sh`, it will be unzipped and executed - useful for hotfixes or config changes in the image. Zip files that do not contain `install.sh` will be unzipped into `${CATALINA_HOME}/webapps/jasperserver-pro`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
-| Tomcat level customizations | `/usr/local/share/jasperserver-pro/tomcat-customization` | Zip files that are unzipped into `${CATALINA_HOME}`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
-| SSL keystore file | `/usr/local/share/jasperserver-pro/ssl-certificate` | .keystore file containing the certificate in this volume will be loaded into /root and Tomcat updated to use it. The keystore password must be set as the KS_PASSWORD environment variable. |
-| Additional default_master installation properties | `/usr/local/share/jasperserver-pro/deploy-customization` |  `default_master_additional.properties` file contents appended to default_master.properties. See "To install the WAR file using js-install scripts" in JasperReports Server Installation Guide |
+| Encryption keystore files | `/usr/local/share/jasperserver-cp/keystore` | REQUIRED.  .jrsks and .jrsksp files used to encrypt sensitive values. This volume is required for use with JRS 7.8.0, which will create these files on this volume if they do not exist when initializing the repository database. |
+| JasperReports Server customizations | `/usr/local/share/jasperserver-cp/customization` | Zip files. If a zip file contains `install.sh`, it will be unzipped and executed - useful for hotfixes or config changes in the image. Zip files that do not contain `install.sh` will be unzipped into `${CATALINA_HOME}/webapps/jasperserver-cp`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
+| Tomcat level customizations | `/usr/local/share/jasperserver-cp/tomcat-customization` | Zip files that are unzipped into `${CATALINA_HOME}`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
+| SSL keystore file | `/usr/local/share/jasperserver-cp/ssl-certificate` | .keystore file containing the certificate in this volume will be loaded into /root and Tomcat updated to use it. The keystore password must be set as the KS_PASSWORD environment variable. |
+| Additional default_master installation properties | `/usr/local/share/jasperserver-cp/deploy-customization` |  `default_master_additional.properties` file contents appended to default_master.properties. See "To install the WAR file using js-install scripts" in JasperReports Server Installation Guide |
 | JDBC driver for the repository database | /usr/src/jasperreports-server/buildomatic/conf_source/db/dbType/jdbc | Override JDBC drivers within the image for the repository. Valid dbTypes are: postgresql, mysql, sqlserver, oracle, db2. Need to set the `JDBC_DRIVER_VERSION` environment variable to the version number of the driver. |
 Note: Tomcat and JasperReports server customizations are applied after deploying the JasperReports Server Application in tomcat.
 
@@ -256,11 +252,10 @@ For the cmdline:
 
 | Description | Path to override in container | Notes |
 | ------------ | ------------- | ------------ |
-| License | `/usr/local/share/jasperserver-pro/license` | REQUIRED. Path to contain `jasperserver.license` file to use. |
-| Encryption keystore files | `/usr/local/share/jasperserver-pro/keystore` | REQUIRED.  .jrsks and .jrsksp files used to encrypt sensitive values. This volume is required for use with JRS 7.8.0, which will create these files on this volume if they do not exist when initializing the database. |
-| Additional default_master installation properties | `/usr/local/share/jasperserver-pro/deploy-customization` |  `default_master_additional.properties` file contents appended to default_master.properties. See "To install the WAR file using js-install scripts" in JasperReports Server Installation Guide |
+| Encryption keystore files | `/usr/local/share/jasperserver-cp/keystore` | REQUIRED.  .jrsks and .jrsksp files used to encrypt sensitive values. This volume is required for use with JRS 7.8.0, which will create these files on this volume if they do not exist when initializing the database. |
+| Additional default_master installation properties | `/usr/local/share/jasperserver-cp/deploy-customization` |  `default_master_additional.properties` file contents appended to default_master.properties. See "To install the WAR file using js-install scripts" in JasperReports Server Installation Guide |
 | JDBC driver for the repository database | /usr/src/jasperreports-server/buildomatic/conf_source/db/<dbType>/jdbc | Override JDBC drivers within the image for the repository. Valid dbTypes are: postgresql, mysql, sqlserver, oracle, db2. Need to set the `JDBC_DRIVER_VERSION` environment variable to the version number of the driver. |
-| Buildomatic customizations | `/usr/local/share/jasperserver-pro/buildomatic_customization` | Zip files. If a zip file contains `install.sh`, it will be unzipped and executed - useful for hotfixes or config changes in the image. Zip files that do not contain `install.sh` will be unzipped into `${BUILDOMATIC_HOME}`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
+| Buildomatic customizations | `/usr/local/share/jasperserver-cp/buildomatic_customization` | Zip files. If a zip file contains `install.sh`, it will be unzipped and executed - useful for hotfixes or config changes in the image. Zip files that do not contain `install.sh` will be unzipped into `${BUILDOMATIC_HOME}`. Files are processed in alphabetical order, so duplicate file names within zips can be overridden. |
 
 ## Setting volumes
 
@@ -270,29 +265,26 @@ docker-compose
 
 ```
    volumes
-      - jrs_license:/usr/local/share/jasperserver-pro/license
+      - LOCQL_DIR:CONTAINER_DIR
 ```
-
-If you update the files in a volume listed above, you will need to restart the container, as these are only processed at container start time.
 
 ## Paths to data volumes on Mac and Windows
 
 You can mount a volume to a directory on your local machine.
 
-For example, to access a license on a local directory on Mac:
+For example, to access a keystore on a local directory on Mac:
 
 ```console
-docker run --name new-jrs -v /<path>/resources/license:/usr/local/share/jasperserver-pro/license \
-   -v /<path>/resources/keystore:/usr/local/share/jasperserver-pro/keystore \
+docker run --name new-jrs -v /<path>/resources/keystore:/usr/local/share/jasperserver-cp/keystore \
   -p 8080:8080 -e DB_HOST=172.17.10.182 -e DB_USER=postgres -e \
-  DB_PASSWORD=postgres -d jasperserver-pro:X.X.
+  DB_PASSWORD=postgres -d jasperserver-cp:X.X.
 ```
 
 Volumes in Docker for Windows need to be under the logged in user's User area ie.
 
 ```console
       volumes
-        - /C/Users/<user>/Documents/License:/usr/local/share/jasperserver-pro/license
+        - /C/Users/<user>/Documents/keystore:/usr/local/share/jasperserver-cp/keystore
 ```
 
 Windows paths need some help with a Docker Compose environment setting
@@ -312,15 +304,13 @@ Also there is the standalone `init` command for the image that allows you to pre
 ```console
 docker run --rm 
 
-  --env-file .env -e DB_HOST=jasperserver_pro_repository  
+  --env-file .env -e DB_HOST=jasperserver_cp_repository  
   
-  -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license
-  
-  -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore
+  -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore
 
-  --name jasperserver-pro-init 
+  --name jasperserver-cp-init 
 
-  jasperserver-pro-cmdline:X.X.X init
+  jasperserver-cp-cmdline:X.X.X init
 ```
 
 The JasperReports Server samples can be loaded via the `init` command without setting the `JRS_LOAD_SAMPLES` environment variable. Add `samples` as a parameter to the `init` command as follows:
@@ -328,15 +318,13 @@ The JasperReports Server samples can be loaded via the `init` command without se
 ```console
 docker run --rm 
 
-  --env-file .env -e DB_HOST=jasperserver_pro_repository  
+  --env-file .env -e DB_HOST=jasperserver_cp_repository  
   
-  -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license
-  
-  -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore
+  -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore
 
-  --name jasperserver-pro-init 
+  --name jasperserver-cp-init 
 
-  jasperserver-pro-cmdline:X.X.X init samples
+  jasperserver-cp-cmdline:X.X.X init samples
 ```
 
 ## Using a pre-existing database
@@ -347,21 +335,19 @@ To run a JasperReports Server container with a pre-existing PostgreSQL instance,
 $ docker run --name some-jasperserver-cmdline \
              -e DB_HOST=some-external-host \
              -e DB_USER=username -e DB_PASSWORD=password \
-             -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license \
-             -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore \
-             jasperserver-pro-cmdline:X.X.X
+             -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore \
+             jasperserver-cp-cmdline:X.X.X
 
 $ docker run --name some-jasperserver \
    -p 8080:8080 -e DB_HOST=some-external-host -e DB_USER=username \
-   -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license \
-   -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore \
-   -e DB_PASSWORD=password -d jasperserver-pro:X.X.X
+   -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore \
+   -e DB_PASSWORD=password -d jasperserver-cp:X.X.X
 ```
 
 Where
-- `jasperserver-pro-cmdline:X.X.X` is the image name and version tag of the jasperserver-pro-cmdline image you built. This image will be used to create containers.
+- `jasperserver-cp-cmdline:X.X.X` is the image name and version tag of the jasperserver-cp-cmdline image you built. This image will be used to create containers.
 - `some-jasperserver-cmdline` is the name of the new JasperReports Server cmdline container
-- `jasperserver-pro:X.X.X` is the image name and version tag of the jasperserver-pro web application image you built. This image will be used to create containers.
+- `jasperserver-cp:X.X.X` is the image name and version tag of the jasperserver-cp web application image you built. This image will be used to create containers.
 - `some-jasperserver` is the name of the new JasperReports Server web application container
 - `some-external-host` is the hostname, fully qualified domain name (FQDN), or IP address of your database server
 - `username` and `password` are the user credentials for your repository database server
@@ -375,17 +361,15 @@ $ docker run --name some-postgres -e POSTGRES_USER=username -e POSTGRES_PASSWORD
 
 $ docker run --name some-jasperserver-cmdline \
             --link some-postgres:postgres \
-             -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license \
-             -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore \
+             -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore \
              -e DB_HOST=some-postgres \
              -e DB_USER=username -e DB_PASSWORD=password \
-             jasperserver-pro-cmdline:X.X.X
+             jasperserver-cp-cmdline:X.X.X
 
 $ docker run --name some-jasperserver --link some-postgres:postgres \
    -p 8080:8080 -e DB_HOST=some-postgres -e DB_USER=db_username \
-   -v /path/to/directoryContainingLicense:/usr/local/share/jasperserver-pro/license \
-   -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-pro/keystore \
-   -e DB_PASSWORD=db_password -d jasperserver-pro:X.X.
+   -v /path/to/directoryForKeystores:/usr/local/share/jasperserver-cp/keystore \
+   -e DB_PASSWORD=db_password -d jasperserver-cp:X.X.
 ```
 
 Where
@@ -393,22 +377,22 @@ Where
 - `some-postgres` is the name of your new database container
 - `username` and `password` are the user credentials to use for the new PostgreSQL container and JasperReports Server container
 - `postgres:10` [PostgreSQL 10](https://hub.docker.com/_/postgres/) is the PostgreSQL image from Docker Hub. This can be replaced with other database types that match the dbType environment variable
-- `jasperserver-pro-cmdline:X.X.X` is the image name and version tag of the jasperserver-pro-cmdline image you built. This image will be used to create containers.
+- `jasperserver-cp-cmdline:X.X.X` is the image name and version tag of the jasperserver-cp-cmdline image you built. This image will be used to create containers.
 - `some-jasperserver-cmdline` is the name of the new JasperReports Server cmdline container
-- `jasperserver-pro:X.X.X` is the image name and version tag for your build. This image will be used to create containers
+- `jasperserver-cp:X.X.X` is the image name and version tag for your build. This image will be used to create containers
 - `some-jasperserver` is the name of the new JasperReports Server container
 -  `db_username` and `db_password` are the user credentials for accessing the database server. Database settings should be modified for your setup
 
 # Building and running with docker-compose
 
-`docker-compose.yml` provides a sample [Compose](https://docs.docker.com/compose/compose-file/) implementation of JasperReports Server with PostgreSQL server, configured with volumes for JasperReports Server web application and license, with pre-setup network and mapped ports. There is also a pre-configured `.env` file for use with docker-compose.
+`docker-compose.yml` provides a sample [Compose](https://docs.docker.com/compose/compose-file/) implementation of JasperReports Server with PostgreSQL server, configured with volumes for JasperReports Server web application, with pre-setup network and mapped ports. There is also a pre-configured `.env` file for use with docker-compose.
 
 To build and run using `docker-compose.yml`, execute the following commands in the root directory of your repository.
 
 ```console
 $ docker-compose build
-$ docker-compose run jasperserver-pro-cmdline
-$ docker-compose up -d jasperserver-pro
+$ docker-compose run jasperserver-cp-cmdline
+$ docker-compose up -d jasperserver-cp
 ```
 
 There is also a `.env-mysql` to show how an external MySQL database running on the default 3306 port can be used as a repository.
@@ -458,15 +442,15 @@ See [Jaspersoft Documentation](https://community.jaspersoft.com/documentation an
   ```console
   docker run --rm 
 
-    -v /path/to/a/volume:/usr/local/share/jasperserver-pro/export 
+    -v /path/to/a/volume:/usr/local/share/jasperserver-cp/export 
 
-    -v /path/to/a/volume-license:/usr/local/share/jasperserver-pro/license -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-pro/keystore
+    -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-cp/keystore
 
-    --network js-docker_default -e DB_HOST=jasperserver_pro_repository  
+    --network js-docker_default -e DB_HOST=jasperserver_cp_repository  
 
-    --name jasperserver-pro-export 
+    --name jasperserver-cp-export 
 
-    jasperserver-pro-cmdline:X.X.X export /usr/local/share/jasperserver-pro/export
+    jasperserver-cp-cmdline:X.X.X export /usr/local/share/jasperserver-cp/export
   ```
 
   1. Use an external repository database. Note the DB_HOST settings
@@ -474,15 +458,15 @@ See [Jaspersoft Documentation](https://community.jaspersoft.com/documentation an
   ```console
   docker run --rm 
 
-    -v /path/to/a/volume:/usr/local/share/jasperserver-pro/import 
+    -v /path/to/a/volume:/usr/local/share/jasperserver-cp/import 
 
-    -v /path/to/a/volume-license:/usr/local/share/jasperserver-pro/license -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-pro/keystore
+    -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-cp/keystore
 
     -e DB_HOST=domain.or.IP.where.repository.database.is  
 
     --name jasperserver-export 
 
-    jasperserver-pro:X.X.X export /usr/local/share/jasperserver-pro/import
+    jasperserver-cp:X.X.X export /usr/local/share/jasperserver-cp/import
   ```
 
 After an export run, for _each_ volume passed in:
@@ -527,15 +511,15 @@ And do either:
   ```console
   docker run --rm 
 
-    -v /path/to/a/volume:/usr/local/share/jasperserver-pro/import 
+    -v /path/to/a/volume:/usr/local/share/jasperserver-cp/import 
 
-    -v /path/to/a/volume-license:/usr/local/share/jasperserver-pro/license -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-pro/keystore
+    -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-cp/keystore
 
     --network js-docker_default -e DB_HOST=jasperserver_pro_repository  
 
-    --name jasperserver-pro-import 
+    --name jasperserver-cp-import 
 
-    jasperserver-pro:X.X.X import /usr/local/share/jasperserver-pro/import
+    jasperserver-cp:X.X.X import /usr/local/share/jasperserver-cp/import
   ```
 
   1. Use an external repository database. Note the DB_HOST setting.
@@ -543,15 +527,15 @@ And do either:
   ```console
   docker run --rm 
 
-    -v /path/to/a/volume:/usr/local/share/jasperserver-pro/import 
+    -v /path/to/a/volume:/usr/local/share/jasperserver-cp/import 
 
-    -v /path/to/a/volume-license:/usr/local/share/jasperserver-pro/license -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-pro/keystore
+    -v /path/to/a/volume-keystore:/usr/local/share/jasperserver-cp/keystore
 
     -e DB_HOST=domain.or.IP.where.database.is  
 
     --name jasperserver-import 
 
-    jasperserver-pro:X.X.X import /usr/local/share/jasperserver-pro/import
+    jasperserver-cp:X.X.X import /usr/local/share/jasperserver-cp/import
   ```
 
 After an import run, for _each_ volume passed in:
@@ -583,11 +567,11 @@ $ docker volume create --name some-jasperserver-log
 
 $ docker run --name some-jasperserver -v 
 
-some-jasperserver-log:/usr/local/tomcat/webapps/jasperserver-pro/WEB-INF/logs 
+some-jasperserver-log:/usr/local/tomcat/webapps/jasperserver-cp/WEB-INF/logs 
 
 -p 8080:8080 -e DB_HOST=172.17.10.182 -e DB_USER=postgres 
 
--e DB_PASSWORD=postgres -d jasperserver-pro:X.X.
+-e DB_PASSWORD=postgres -d jasperserver-cp:X.X.
 
 ```
 
@@ -595,11 +579,11 @@ Where:
 
 - `some-jasperserver-log` is the name of the new data volume for log storage
 - `some-jasperserver` is the name of the new JasperReports Server container
-- `jasperserver-pro:X.X.X`  is the image name and version tag for your build. This image will be used to create containers
+- `jasperserver-cp:X.X.X`  is the image name and version tag for your build. This image will be used to create containers
 - Database settings should be modified for your setup
 
 
-Note that docker containers do not have separate logs. All information is logged via the driver or application. In the case of the JasperReports Server container, the main log is output by Tomcat to the docker-engine via the logging driver, and the application log specific to JasperReports Server is output to `some-jasperserver-log:/usr/local/tomcat/webapps/jasperserver-pro/WEB-INF/logs`
+Note that docker containers do not have separate logs. All information is logged via the driver or application. In the case of the JasperReports Server container, the main log is output by Tomcat to the docker-engine via the logging driver, and the application log specific to JasperReports Server is output to `some-jasperserver-log:/usr/local/tomcat/webapps/jasperserver-cp/WEB-INF/logs`
 
 
 ## Logging in to JasperReports Server
@@ -608,11 +592,11 @@ Note that docker containers do not have separate logs. All information is logged
 After the JasperReports Server container is up, log into it via URL The URL depends upon your installation. The default configuration uses:
 
 ```console
-http://<domain or IP>:8080/jasperserver-pro
+http://<domain or IP>:8080/jasperserver-cp
 
 or if running on port 80:
 
-http://<domain or IP>/jasperserver-pro
+http://<domain or IP>/jasperserver-cp
 ```
 
 
@@ -661,7 +645,7 @@ for more information; for Mac, also see:
 
 Due to the nature of [Docker for Mac]https://docs.docker.com/engine/installation/mac/#/docker-for-mac, `docker volume inspect` returns paths that are relative to the main docker process. You must either access the path in the container, for example:
 
-`/var/lib/docker/volumes/some-jasperserver-license/_data`
+`/var/lib/docker/volumes/some-jasperserver-keystore/_data`
 
 or define a volume path instead of a named volume
 
@@ -686,7 +670,7 @@ PS C:\Users\user\Documents\GitHub\js-docker> docker run --rm --env-file .env-mys
 
 --name jrs-init-test -v /C/Users/user/Documents/Docker/buildomatic/mysql/jdbc:/usr/src/jasperreports-server/buildomatic/conf_source/db/mysql/jdbc
 
-jasperserver-pro:X.X.X ini
+jasperserver-cp:X.X.X ini
 
      [exec] Execute failed: java.io.IOException: Cannot run program "git": error=2, No such file or directory
 
