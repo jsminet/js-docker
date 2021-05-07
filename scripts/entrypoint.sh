@@ -9,7 +9,7 @@
 # Use jasperserver-cp-cmdline to initialize the repository database
 
 # Sets script to fail if any command fails.
-set -e
+set -ex
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 

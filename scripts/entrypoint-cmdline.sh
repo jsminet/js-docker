@@ -11,7 +11,7 @@
 # Default "init"
 
 # Sets script to fail if any command fails.
-set -e
+set -ex
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -135,14 +135,18 @@ init_databases() {
   fi
   
   echo "Database init status: administrative : $sawAdministrative , $DB_NAME : $sawJRSDBName , foodmart: $sawFoodmartDBName , sugarcrm $sawSugarCRMDBName"
+  
   if [ "$sawJRSDBName" = "no" ]; then
     echo "Initializing $DB_NAME repository database"
 	execute_buildomatic set-ce-webapp-name create-js-db init-js-db-ce import-minimal-ce
-	
+	  else
+    echo "$DB_NAME repository database already exists: not creating and loading it"
+  fi
+
 	JRS_LOAD_SAMPLES=${JRS_LOAD_SAMPLES:-false}
-	  
+	
 	# Only install the samples if explicitly requested
-	if [ "$1" = "samples" -o "$JRS_LOAD_SAMPLES" = "true" ]; then
+	if [ "$1" = samples -o $JRS_LOAD_SAMPLES = true ]; then
 		echo "Samples load requested"
 		# if foodmart database not present - setup database
 		if [ "$sawFoodmartDBName" = "no" ]; then
@@ -158,10 +162,9 @@ init_databases() {
 		fi
 
 		execute_buildomatic import-sample-data-ce
+	else
+		echo "Samples load NOT requested"
 	fi
-  else
-    echo "$DB_NAME repository database already exists: not creating and loading it or samples"
-  fi
 }
 
 import() {

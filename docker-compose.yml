@@ -101,12 +101,9 @@ services:
     # setting following values here will override settings from env_file
     environment:
       - DB_HOST=jasperserver_cp_repository
-      - JRS_LOAD_SAMPLES=true
+      - JRS_LOAD_SAMPLES=false
 
     volumes:
-      # where jasperserver.license file is. Otherwise uses temporary license
-      #- /path/to/license:/usr/local/share/jasperserver-cp/license 
-      - ./license:/usr/local/share/jasperserver-cp/license
 
       # As of JasperReports Server 7.5, this volume is required:
       #   - saves .jrsks and .jrsksp files if they are created
@@ -131,6 +128,7 @@ services:
     mem_limit: 2g
     mem_reservation: 256m
     cpu_shares: 256
+    command: init
  
  # repository and sample databases too in an image if configured
  # can make this a dependency for the instances above
